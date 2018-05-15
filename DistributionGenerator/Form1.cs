@@ -48,6 +48,7 @@ namespace DistributionGenerator
             if (radioButton3.Checked)
             {
                 distribution = Distribution.Exponential;
+                c = Convert.ToDouble(numericUpDown10.Value);
             }
             if (radioButton4.Checked)
             {

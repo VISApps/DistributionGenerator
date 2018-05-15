@@ -29,20 +29,19 @@ namespace DistributionGenerator
 
         public double[,] CreateHistogram(double a, double b, int n, int intervals, Distribution distribution, double c, double d, RandomType type)
         {
-            double[] values = new double[n];
-            for (int i = 0; i < n; i++)
-            {
-                values[i] = random.NextDouble(type) * (b - a) + a;
-            }
+            double[] values = new double[1];
             switch (distribution)
             {
+                case Distribution.Even:
+                    values = GenerateEven(a, b, n, type);
+                    break;
                 case Distribution.Triangular:
                     //values = ConvertToTriangular(values, param);
                     values = GenerateTriangular(a, b, c, n, type);
                     //n = n / 2;
                     break;
                 case Distribution.Exponential:
-                    values = GenerateExponential(a, b, n, type);
+                    values = GenerateExponential(a, b, c, n, type);
                     break;
                 case Distribution.Trapezoidal:
                     values = GenerateTrapezoidal(a,b,c,d,n, type);
@@ -111,12 +110,12 @@ namespace DistributionGenerator
             return values;
         }
 
-        private double[] GenerateExponential(double a, double b, int n, RandomType type)
+        private double[] GenerateExponential(double a, double b, double l, int n, RandomType type)
         {
             double[] result = new double[n];
             for (int i = 0; i < result.Length; i++)
             {
-                result[i] = (-1) * Math.Log(random.NextDouble(type));
+                result[i] = (-1/(l)) * Math.Log(random.NextDouble(type) * (b - a) + a);
             }
             return result;
         }
@@ -169,6 +168,16 @@ namespace DistributionGenerator
                     value = value + random.NextDouble(type);
                 }
                 result[i] = m + (sigma * (Math.Sqrt(12 / count) * (value - (count/2))));
+            }
+            return result;
+        }
+
+        private double[] GenerateEven(double a, double b, int n, RandomType type)
+        {
+            double[] result = new double[n];
+            for (int i = 0; i < n; i++)
+            {
+                result[i] = random.NextDouble(type) * (b - a) + a;
             }
             return result;
         }
